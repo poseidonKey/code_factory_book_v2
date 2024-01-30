@@ -64,16 +64,16 @@ class _CamScreenState extends State<CamScreen> {
           },
         ),
       );
+      await engine!.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+      await engine!.enableVideo();
+      await engine!.startPreview();
+      await engine!.joinChannel(
+        token: TEMP_TOKEN,
+        channelId: CHANNEL_NAME,
+        uid: 0,
+        options: const ChannelMediaOptions(),
+      );
     }
-    await engine!.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-    await engine!.enableVideo();
-    await engine!.startPreview();
-    await engine!.joinChannel(
-      token: TEMP_TOKEN,
-      channelId: CHANNEL_NAME,
-      uid: 0,
-      options: const ChannelMediaOptions(),
-    );
 
     return true;
   }
