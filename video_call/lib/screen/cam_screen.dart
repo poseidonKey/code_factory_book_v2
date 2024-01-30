@@ -20,6 +20,19 @@ class _CamScreenState extends State<CamScreen> {
     init();
   }
 
+  @override
+  void dispose() async {
+    if (engine != null) {
+      await engine!.leaveChannel(
+        options: const LeaveChannelOptions(),
+      );
+
+      engine!.release();
+    }
+
+    super.dispose();
+  }
+
   Future<bool> init() async {
     final resp = await [Permission.camera, Permission.microphone].request();
     final cameraPermission = resp[Permission.camera];
