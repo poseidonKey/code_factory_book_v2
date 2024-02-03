@@ -1,4 +1,8 @@
 import 'package:calendar_scheduler/component/main_calendar.dart';
+import 'package:calendar_scheduler/component/schedule_bottom_sheet.dart';
+import 'package:calendar_scheduler/component/schedule_card.dart';
+import 'package:calendar_scheduler/component/today_banner.dart';
+import 'package:calendar_scheduler/const/colors.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,8 +36,26 @@ class _HomeScreenState extends State<HomeScreen> {
               onDaySelected: onDaySelected,
               selectedDate: selectedDate,
             ),
+            const SizedBox(
+              height: 8,
+            ),
+            TodayBanner(selectedDate: selectedDate, count: 0),
+            const ScheduleCard(
+                startTime: 12, endTime: 14, content: 'study programming')
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: PRIMARY_COLOR,
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isDismissible: true,
+            builder: (_) => const ScheduleBottomSheet(),
+            isScrollControlled: true,
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
