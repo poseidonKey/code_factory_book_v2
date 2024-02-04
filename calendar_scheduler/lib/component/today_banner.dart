@@ -1,6 +1,5 @@
 import 'package:calendar_scheduler/const/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class TodayBanner extends StatelessWidget {
   final DateTime selectedDate;

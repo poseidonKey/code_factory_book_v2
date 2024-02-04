@@ -3,7 +3,9 @@ import 'package:calendar_scheduler/component/schedule_bottom_sheet.dart';
 import 'package:calendar_scheduler/component/schedule_card.dart';
 import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/colors.dart';
+import 'package:calendar_scheduler/database/drift_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,9 +41,53 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 8,
             ),
-            TodayBanner(selectedDate: selectedDate, count: 0),
-            const ScheduleCard(
-                startTime: 12, endTime: 14, content: 'study programming')
+            StreamBuilder(
+              stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Schedule>> snapshot) {
+                return TodayBanner(
+                    selectedDate: selectedDate,
+                    count: snapshot.data?.length ?? 0);
+              },
+            ),
+            Expanded(
+              child: StreamBuilder(
+                  stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    }
+                    return ListView.builder(
+                      itemBuilder: ((context, index) {
+                        final schedule = snapshot.data![index];
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 8, left: 8, right: 8),
+                          child: Dismissible(
+                            key: ObjectKey(schedule.id),
+                            direction: DismissDirection.startToEnd,
+                            onDismissed: (direction) {
+                              GetIt.I<LocalDatabase>()
+                                  .removeSchedule(schedule.id);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 8,
+                                left: 8,
+                                right: 8,
+                              ),
+                              child: ScheduleCard(
+                                  startTime: schedule.startTime,
+                                  endTime: schedule.endTime,
+                                  content: schedule.content),
+                            ),
+                          ),
+                        );
+                      }),
+                      itemCount: snapshot.data!.length,
+                    );
+                  }),
+            ),
           ],
         ),
       ),
@@ -51,7 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
           showModalBottomSheet(
             context: context,
             isDismissible: true,
-            builder: (_) => const ScheduleBottomSheet(),
+            builder: (_) => ScheduleBottomSheet(
+              selectedDate: selectedDate,
+            ),
             isScrollControlled: true,
           );
         },
