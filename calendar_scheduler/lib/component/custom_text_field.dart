@@ -33,8 +33,8 @@ class CustomTextField extends StatelessWidget {
             onSaved: onSaved,
             validator: validator,
             cursorColor: Colors.grey,
-            maxLines: isTime ? 1 : null,
-            expands: !isTime,
+            maxLines: isTime ? 1 : null, //한 줄 또는 여러줄로 동작하게 한다.
+            expands: !isTime, //내용 인 경우만 최대로 확장.
             keyboardType:
                 isTime ? TextInputType.number : TextInputType.multiline,
             inputFormatters:
