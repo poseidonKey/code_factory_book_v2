@@ -1,9 +1,9 @@
 import 'package:calendar_scheduler/model/schedule_model.dart';
-import 'package:calendar_scheduler/provider/schedule_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:calendar_scheduler/component/custom_text_field.dart';
 import 'package:calendar_scheduler/const/colors.dart';
+import 'package:uuid/uuid.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   final DateTime selectedDate;
@@ -113,13 +113,14 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     if (formKey.currentState!.validate()) {
       // ➊ 폼 검증하기
       formKey.currentState!.save(); // ➋ 폼 저장하기
-      context.read<ScheduleProvider>().createSchedule(
-            schedule: ScheduleModel(
-                id: 'new model',
-                content: content!,
-                date: widget.selectedDate,
-                startTime: startTime!,
-                endTime: endTime!),
+      final schedule = ScheduleModel(
+          id: const Uuid().v4(),
+          content: content!,
+          date: widget.selectedDate,
+          startTime: startTime!,
+          endTime: endTime!);
+      FirebaseFirestore.instance.collection('schedule').doc(schedule.id).set(
+            schedule.toJson(),
           );
 
       Navigator.of(context).pop();
