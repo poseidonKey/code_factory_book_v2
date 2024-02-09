@@ -64,6 +64,10 @@ class AuthScreen extends StatelessWidget {
       final result =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result.additionalUserInfo.toString())),
+      );
+
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => const HomeScreen(),
