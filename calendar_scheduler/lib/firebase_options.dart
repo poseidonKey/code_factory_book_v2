@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,16 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCd3lKIfP9F1HySbxRc0dkslep-c_jmvd4',
-    appId: '1:380088802231:web:ef001a9efccf56164ce632',
-    messagingSenderId: '380088802231',
-    projectId: 'calendar-scheduler-eaf1d',
-    authDomain: 'calendar-scheduler-eaf1d.firebaseapp.com',
-    storageBucket: 'calendar-scheduler-eaf1d.appspot.com',
-    measurementId: 'G-3H4PG5FPGT',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDcTFeHjsKxsRW_uc6GpqM6G3gxQ46kvjA',
     appId: '1:380088802231:android:8b43ad1b9408e7414ce632',
@@ -67,15 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '380088802231',
     projectId: 'calendar-scheduler-eaf1d',
     storageBucket: 'calendar-scheduler-eaf1d.appspot.com',
+    androidClientId: '380088802231-0o8co4f2oa2c9n654pfich0kbs1obr1u.apps.googleusercontent.com',
+    iosClientId: '380088802231-21kblqeot3o5sh7ojalisia3ml0uibgh.apps.googleusercontent.com',
     iosBundleId: 'com.example.calendarScheduler',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC8qPAutbqVt2Pu66kusbbC9bWDmQOhZpA',
-    appId: '1:380088802231:ios:c37e3fcd1d1a104f4ce632',
-    messagingSenderId: '380088802231',
-    projectId: 'calendar-scheduler-eaf1d',
-    storageBucket: 'calendar-scheduler-eaf1d.appspot.com',
-    iosBundleId: 'com.example.calendarScheduler.RunnerTests',
   );
 }
